@@ -6,6 +6,7 @@ const assert = require("power-assert");
 
 const AWS = require("aws-sdk");
 const docClient = new AWS.DynamoDB.DocumentClient();
+const STORAGE_TABLE_NAME = "ilab-bot-storage";
 
 describe("get handler",()=>{
   beforeEach(()=>sinon.stub(docClient,"get"));
@@ -18,14 +19,14 @@ describe("get handler",()=>{
 
     const event = {key:testKey};
 
-    const handler = get.factory(docClient);
+    const handler = get.factory(docClient,STORAGE_TABLE_NAME);
     handler(event,null,callback);
 
     assert(docClient.get.callCount === 1);
     const docClientParam = docClient.get.getCall(0).args[0];
     const docClientCallBack = docClient.get.getCall(0).args[1];
 
-    assert(docClientParam.TableName === "ilab-bot-storage");
+    assert(docClientParam.TableName === STORAGE_TABLE_NAME);
     assert(docClientParam.Key,{key:testKey});
 
     docClientCallBack(null,{Item:{key:testKey,value:testValue}});
@@ -41,14 +42,14 @@ describe("get handler",()=>{
 
     const event = {key:testKey};
 
-    const handler = get.factory(docClient);
+    const handler = get.factory(docClient,STORAGE_TABLE_NAME);
     handler(event,null,callback);
 
     assert(docClient.get.callCount === 1);
     const docClientParam = docClient.get.getCall(0).args[0];
     const docClientCallBack = docClient.get.getCall(0).args[1];
 
-    assert(docClientParam.TableName === "ilab-bot-storage");
+    assert(docClientParam.TableName === STORAGE_TABLE_NAME);
     assert(docClientParam.Key,{key:testKey});
 
     docClientCallBack(null,{});
@@ -62,7 +63,7 @@ describe("get handler",()=>{
 
     const event = {};
 
-    const handler = get.factory(docClient);
+    const handler = get.factory(docClient,STORAGE_TABLE_NAME);
     handler(event,null,callback);
 
     assert(callback.callCount === 1);
@@ -76,14 +77,14 @@ describe("get handler",()=>{
 
     const event = {key:testKey};
 
-    const handler = get.factory(docClient);
+    const handler = get.factory(docClient,STORAGE_TABLE_NAME);
     handler(event,null,callback);
 
     assert(docClient.get.callCount === 1);
     const docClientParam = docClient.get.getCall(0).args[0];
     const docClientCallBack = docClient.get.getCall(0).args[1];
 
-    assert(docClientParam.TableName === "ilab-bot-storage");
+    assert(docClientParam.TableName === STORAGE_TABLE_NAME);
     assert(docClientParam.Key,{key:testKey});
 
     docClientCallBack("some DynamoDB error",null);

@@ -6,6 +6,7 @@ const assert = require("power-assert");
 
 const AWS = require("aws-sdk");
 const docClient = new AWS.DynamoDB.DocumentClient();
+const STORAGE_TABLE_NAME = "ilab-bot-storage";
 
 describe("set handler",()=>{
   beforeEach(()=>sinon.stub(docClient,"put"));
@@ -21,14 +22,14 @@ describe("set handler",()=>{
       value:testValue
     };
 
-    const handler = set.factory(docClient);
+    const handler = set.factory(docClient,STORAGE_TABLE_NAME);
     handler(event,null,callback);
 
     assert(docClient.put.callCount === 1);
     const docClientParam = docClient.put.getCall(0).args[0];
     const docClientCallBack = docClient.put.getCall(0).args[1];
 
-    assert(docClientParam.TableName === "ilab-bot-storage");
+    assert(docClientParam.TableName === STORAGE_TABLE_NAME);
     assert(docClientParam.Item.key === testKey);
     assert(docClientParam.Item.value === testValue);
 
@@ -45,7 +46,7 @@ describe("set handler",()=>{
       value:"somevalue"
     };
 
-    const handler = set.factory(docClient);
+    const handler = set.factory(docClient,STORAGE_TABLE_NAME);
     handler(event,null,callback);
 
     assert(callback.callCount === 1);
@@ -60,7 +61,7 @@ describe("set handler",()=>{
       value:"somevalue"
     };
 
-    const handler = set.factory(docClient);
+    const handler = set.factory(docClient,STORAGE_TABLE_NAME);
     handler(event,null,callback);
 
     assert(callback.callCount === 1);
@@ -74,7 +75,7 @@ describe("set handler",()=>{
       key:"testKey"
     };
 
-    const handler = set.factory(docClient);
+    const handler = set.factory(docClient,STORAGE_TABLE_NAME);
     handler(event,null,callback);
 
     assert(callback.callCount === 1);
@@ -91,14 +92,14 @@ describe("set handler",()=>{
       value:testValue
     };
 
-    const handler = set.factory(docClient);
+    const handler = set.factory(docClient,STORAGE_TABLE_NAME);
     handler(event,null,callback);
 
     assert(docClient.put.callCount === 1);
     const docClientParam = docClient.put.getCall(0).args[0];
     const docClientCallBack = docClient.put.getCall(0).args[1];
 
-    assert(docClientParam.TableName === "ilab-bot-storage");
+    assert(docClientParam.TableName === STORAGE_TABLE_NAME);
     assert(docClientParam.Item.key === testKey);
     assert(docClientParam.Item.value === testValue);
 

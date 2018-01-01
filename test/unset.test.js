@@ -6,6 +6,7 @@ const assert = require("power-assert");
 
 const AWS = require("aws-sdk");
 const docClient = new AWS.DynamoDB.DocumentClient();
+const STORAGE_TABLE_NAME = "ilab-bot-storage";
 
 describe("unset handler",()=>{
   beforeEach(()=>sinon.stub(docClient,"delete"));
@@ -17,14 +18,14 @@ describe("unset handler",()=>{
 
     const event = {key:testKey};
 
-    const handler = unset.factory(docClient);
+    const handler = unset.factory(docClient,STORAGE_TABLE_NAME);
     handler(event,null,callback);
 
     assert(docClient.delete.callCount === 1);
     const docClientParam = docClient.delete.getCall(0).args[0];
     const docClientCallBack = docClient.delete.getCall(0).args[1];
 
-    assert(docClientParam.TableName === "ilab-bot-storage");
+    assert(docClientParam.TableName === STORAGE_TABLE_NAME);
     assert(docClientParam.Key,{key:testKey});
 
     docClientCallBack(null);
@@ -38,7 +39,7 @@ describe("unset handler",()=>{
 
     const event = {};
 
-    const handler = unset.factory(docClient);
+    const handler = unset.factory(docClient,STORAGE_TABLE_NAME);
     handler(event,null,callback);
 
     assert(callback.callCount === 1);
@@ -51,14 +52,14 @@ describe("unset handler",()=>{
 
     const event = {key:testKey};
 
-    const handler = unset.factory(docClient);
+    const handler = unset.factory(docClient,STORAGE_TABLE_NAME);
     handler(event,null,callback);
 
     assert(docClient.delete.callCount === 1);
     const docClientParam = docClient.delete.getCall(0).args[0];
     const docClientCallBack = docClient.delete.getCall(0).args[1];
 
-    assert(docClientParam.TableName === "ilab-bot-storage");
+    assert(docClientParam.TableName === STORAGE_TABLE_NAME);
     assert(docClientParam.Key,{key:testKey});
 
     docClientCallBack("some DynamoDB error");

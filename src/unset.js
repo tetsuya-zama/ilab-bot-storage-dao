@@ -3,7 +3,9 @@
 const AWS = require("aws-sdk");
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-function factory(docClient){
+const STORAGE_TABLE_NAME = process.env.STORAGE_TABLE_NAME;
+
+function factory(docClient,STORAGE_TABLE_NAME){
   return function(event,context,callback){
     const key = event.key;
 
@@ -17,15 +19,15 @@ function factory(docClient){
 
       docClient.delete(param,function(err){
         if(err){
-          callback(err)
+          callback(err);
         }else{
           callback();
         }
       });
     }
-  }
+  };
 }
 
 exports.factory = factory;
 
-exports.handler = factory(docClient);
+exports.handler = factory(docClient,STORAGE_TABLE_NAME);
